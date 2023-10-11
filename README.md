@@ -1,0 +1,2 @@
+# dynamictypingexample
+Dynamic typing test
