@@ -45,7 +45,7 @@ jobs:
       - name: Linting
         run: python3.12 -m flake8  # Change to your python version
     
-      # - name: Build # Not needed for this Python projects
+      # - name: Build # Not needed for this Python project
 
       - name: Run tests with Pytest
         run: python3.12 -m pytest  # Replace with your test command
@@ -56,7 +56,7 @@ jobs:
           COVERAGE_VAR=$(jq -r '.totals.percent_covered_display' < coverage.json)
           echo "$COVERAGE_VAR"
           if [[ $COVERAGE_VAR -lt 80 ]]; then  # Adjust threshold as needed
-            echo "::warning::Coverage below threshold (${COVERAGE_VAR}). \
+            echo "::warning::Coverage below threshold (${COVERAGE_VAR}%). \
             Please improve test coverage." >> $GITHUB_STEP_SUMMARY 
           else
             echo "$COVERAGE_VAR % line coverage"
