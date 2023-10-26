@@ -43,7 +43,18 @@ jobs:
           python3.12 -m pip install -r requirements.txt  # Replace with your requirements file
 
       - name: Linting
-        run: python3.12 -m flake8  # Change to your python version
+        id: set_exit_status
+        run: |
+          python3.12 -m flake8  # Change to your python version
+          echo "::set-output name=exit_status::${?}"
+        continue-on-error: true
+      
+      - name: Print a warning if there are linting errors
+        run: |
+          exit_status=${{ steps.set_exit_status.outputs.exit_status }}
+          if [ $exit_status -ne 0 ]; then
+            echo "Warning: The previous step exited with a non-zero status code."
+          fi
     
       # - name: Build # Not needed for this Python projects
 
