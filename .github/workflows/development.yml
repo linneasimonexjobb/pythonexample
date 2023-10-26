@@ -53,9 +53,8 @@ jobs:
       - name: Retrieve unit test coverage
         run: |
           python3.12 -m pytest --cov=project tests/ --cov-report=json #Change "project" to your module name.
-          COVERAGE=$(jq -r '.totals.percent_covered' < coverage.json)
-          echo "$COVERAGE"
-          COVERAGE_VAR=$(python3.12 -c "print(int($COVERAGE_VAR))")
+          COVERAGE_VAR=$(jq -r '.totals.percent_covered_display' < coverage.json)
+          echo "$COVERAGE_VAR"
           if [[ $COVERAGE_VAR -lt 80 ]]; then  # Adjust threshold as needed
             echo "::warning::Coverage below threshold (${COVERAGE_VAR}). \
             Please improve test coverage." >> $GITHUB_STEP_SUMMARY 
