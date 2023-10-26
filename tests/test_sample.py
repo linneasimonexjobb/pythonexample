@@ -1,6 +1,5 @@
-def func(x):
-    return x + 1
+from project import small_func
 
 
 def test_answer():
-    assert func(3) == 4
+    assert small_func.func(3) == 4
