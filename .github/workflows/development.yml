@@ -30,35 +30,35 @@ jobs:
         with:
           python-version: 3.12  # Change this to the desired Python version
 
-      # Cache dependencies for faster workflow
-        - name: Cache dependencies
-          uses: actions/cache@v3
-          with:
-            path: ~/.cache/pip
-            key: ${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+    # Cache dependencies for faster workflow
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
 
-        - name: Install dependencies
+      - name: Install dependencies
         run: |
           python3.12 -m pip install --upgrade pip
           python3.12 -m pip install -r requirements.txt  # Replace with your requirements file
 
-        - name: Linting
-          run: python3.12 -m flake8  # Change to your python version
+      - name: Linting
+        run: python3.12 -m flake8  # Change to your python version
     
-        - name: Build # Not needed for this Python projects
+      # - name: Build # Not needed for this Python projects
 
-        - name: Run tests with Pytest
+      - name: Run tests with Pytest
         run: python3.12 -m pytest  # Replace with your test command
 
-        - name: Retrieve unit test coverage
-          run: |
-            python3.12 -m pytest --cov=project tests/ --cov-report=json #Change "project" to your module name.
-            COVERAGE_VAR=$(jq -r '.meta.totals.percent_covered' < coverage.json)
-            echo "$COVERAGE_VAR"
-            if [[ $COVERAGE_VAR -lt 80 ]]; then  # Adjust threshold as needed
-              echo "::warning::Coverage below threshold (${COVERAGE_VAR}). \
-              Please improve test coverage." >> $GITHUB_STEP_SUMMARY 
-            else
-              echo "$COVERAGE_VAR % line coverage"
-            fi
+      - name: Retrieve unit test coverage
+        run: |
+          python3.12 -m pytest --cov=project tests/ --cov-report=json #Change "project" to your module name.
+          COVERAGE_VAR=$(jq -r '.meta.totals.percent_covered' < coverage.json)
+          echo "$COVERAGE_VAR"
+          if [[ $COVERAGE_VAR -lt 80 ]]; then  # Adjust threshold as needed
+            echo "::warning::Coverage below threshold (${COVERAGE_VAR}). \
+            Please improve test coverage." >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "$COVERAGE_VAR % line coverage"
+          fi
 
