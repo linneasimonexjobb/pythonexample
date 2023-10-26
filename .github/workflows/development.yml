@@ -1,0 +1,64 @@
+---
+name: python-ci
+
+on:
+  push:
+    branches-ignore:
+      - main
+    paths-ignore:
+      - 'wiki/**'
+
+permissions:
+  contents: read # The workflow is read only
+
+# Ensures that only one workflow per branch/environment will be run
+concurrency:
+  group: ${{ github.head_ref || github.ref_name }} 
+  cancel-in-progress: true
+
+jobs:      
+  run_project:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30 #job times out after 30 mins
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: 3.12  # Change this to the desired Python version
+
+    # Cache dependencies for faster workflow
+      - name: Cache dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ hashFiles('setup.py') }}-${{ hashFiles('dev-requirements.txt') }}
+
+      - name: Install dependencies
+        run: |
+          python3.12 -m pip install --upgrade pip
+          python3.12 -m pip install -r requirements.txt  # Replace with your requirements file
+
+      - name: Linting
+        run: python3.12 -m flake8  # Change to your python version
+    
+      # - name: Build # Not needed for this Python project
+
+      - name: Run tests with Pytest
+        run: python3.12 -m pytest  # Replace with your test command
+
+      - name: Retrieve unit test coverage
+        run: |
+          python3.12 -m pytest --cov=project tests/ --cov-report=json #Change "project" to your module name.
+          COVERAGE_VAR=$(jq -r '.totals.percent_covered_display' < coverage.json)
+          echo "$COVERAGE_VAR"
+          if [[ $COVERAGE_VAR -lt 80 ]]; then  # Adjust threshold as needed
+            echo "::warning::Coverage below threshold (${COVERAGE_VAR}%). \
+            Please improve test coverage." >> $GITHUB_STEP_SUMMARY 
+          else
+            echo "$COVERAGE_VAR % line coverage"
+          fi
+
