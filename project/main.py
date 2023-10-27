@@ -1,3 +1,6 @@
+"""Slot machine written in Python."""
+
+
 import random
 
 MAX_LINES = 3
@@ -23,6 +26,7 @@ symbol_value = {
 
 
 def check_winnings(columns, lines, bet, values):
+    """Check winnings."""
     winnings = 0
     winning_lines = []
     for line in range(lines):
@@ -39,6 +43,7 @@ def check_winnings(columns, lines, bet, values):
 
 
 def get_slot_machine_spin(rows, cols, symbols):
+    """Get slot machine spins."""
     all_symbols = []
     for symbol, symbol_count in symbols.items():
         for _ in range(symbol_count):
@@ -59,6 +64,7 @@ def get_slot_machine_spin(rows, cols, symbols):
 
 
 def print_slot_machine(columns):
+    """Print slot machine to command line."""
     for row in range(len(columns[0])):
         for i, column in enumerate(columns):
             if i != len(columns) - 1:
@@ -70,6 +76,7 @@ def print_slot_machine(columns):
 
 
 def deposit():
+    """Deposit verification."""
     while True:
         amount = input("What would you like to deposit? $")
         if amount.isdigit():
@@ -85,6 +92,7 @@ def deposit():
 
 
 def get_number_of_lines():
+    """Get number of lines to bet on."""
     while True:
         lines = input(
             "Enter the number of lines to bet on (1-" + str(MAX_LINES) + ")? ")
@@ -101,6 +109,7 @@ def get_number_of_lines():
 
 
 def get_bet():
+    """Get amount of bet on each line."""
     while True:
         amount = input("What would you like to bet on each line? $")
         if amount.isdigit():
@@ -116,6 +125,7 @@ def get_bet():
 
 
 def spin(balance):
+    """Spin the slot machine."""
     lines = get_number_of_lines()
     while True:
         bet = get_bet()
@@ -139,6 +149,7 @@ def spin(balance):
 
 
 def main():
+    """Run the slot machine."""
     balance = deposit()
     while True:
         print(f"Current balance is ${balance}")
