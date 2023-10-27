@@ -43,7 +43,8 @@ jobs:
           python3.12 -m pip install -r requirements.txt  # Replace with your requirements file
 
       - name: Linting
-        run: python3.12 -m flake8  # Change to your python version
+        run: |
+          python3.12 -m flake8  # Change to your python version
     
       # - name: Build # Not needed for this Python project
 
