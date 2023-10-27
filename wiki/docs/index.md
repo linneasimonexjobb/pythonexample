@@ -9,7 +9,7 @@ This first version is made by the master students Simon and Linnéa at Linköpin
 ## Navigation
 Write where the different navigations take you in the wiki.
 
-In this wiki, we have configured the different tools of DevOps in each NavBar.
+In this wiki, we have configured the different tools of DevOps in each NavBar
 
 We recommend having a documentation tidy and easy to maintain. An example would be:
 
